@@ -16,6 +16,7 @@ build:
     - luigid = luigi.cmdline:luigid
     - luigi-grep = luigi.tools.luigi_grep:main
     - luigi-deps = luigi.tools.deps:main
+    - luigi-deps-tree = luigi.tools.deps_tree:main
 
 requirements:
   host:
@@ -43,6 +44,7 @@ test:
     - luigid --help
     - luigi-grep --help
     - luigi-deps --help
+    - luigi-deps-tree --help
 
 about:
   home: https://github.com/spotify/luigi
