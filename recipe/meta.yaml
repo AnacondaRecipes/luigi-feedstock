@@ -23,7 +23,7 @@ build:
     - luigi-deps-tree = luigi.tools.deps_tree:main
 
 requirements:
-  build:
+  host:
     - python
     - setuptools
   run:
