@@ -25,11 +25,12 @@ requirements:
   run:
     - python
     - setuptools
-    - tornado >=4.0,<6
+    - tornado >=5.0,<7
     # cf doesn't have this package to satisfy this dependency on win
     # - python-daemon <2.2.0  # [win]
     - python-daemon  # [not win]
     - python-dateutil >=2.7.5,<3
+    - tenacity >=6.3.0,<7
     - enum34 >1.1.0  # [py<34]
   run_constrained:
     - prometheus_client ==0.5.0
@@ -40,6 +41,7 @@ test:
     - pip
   imports:
     - luigi
+    - luigi.configuration
     - luigi.contrib
     - luigi.contrib.hdfs
     - luigi.tools
