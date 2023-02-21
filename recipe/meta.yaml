@@ -1,4 +1,4 @@
-{% set version = "3.0.3" %}
+{% set version = "3.2.0" %}
 
 package:
   name: luigi
@@ -6,10 +6,11 @@ package:
 
 source:
   url: https://github.com/spotify/luigi/archive/{{ version }}.tar.gz
-  sha256: 473960e9a213ef5693c75351929f19b8dbe427e13026c298a8ff155d74ac6751
+  sha256: c8e48d48338f73fd1071654988cdc1725fc13b6b9b9c2f7532241e11994a420b
 
 build:
   number: 0
+  skip: true  # [py<35 or s390x or win]
   script: {{ PYTHON }} -m pip install . --no-deps -vv
   entry_points:
     - luigi = luigi.cmdline:luigi_run
@@ -22,18 +23,19 @@ requirements:
   host:
     - python
     - pip
+    - setuptools
+    - wheel
   run:
     - python
-    - setuptools
     - tornado >=5.0,<7
     # cf doesn't have this package to satisfy this dependency on win
     # - python-daemon <2.2.0  # [win]
     - python-daemon  # [not win]
     - python-dateutil >=2.7.5,<3
-    - tenacity >=6.3.0,<7
+    - tenacity >=8,<9
     - enum34 >1.1.0  # [py<34]
   run_constrained:
-    - prometheus_client ==0.5.0
+    - prometheus_client >=0.5,<0.15
     - toml <2.0.0
 
 test:
@@ -52,7 +54,7 @@ test:
     - luigi-grep --help
     - luigi-deps --help
     - luigi-deps-tree --help
-    - pip check  # [not win]
+    - pip check
 
 about:
   home: https://github.com/spotify/luigi
