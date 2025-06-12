@@ -34,7 +34,6 @@ requirements:
     - python-daemon  # [not win]
     - python-dateutil >=2.7.5,<3
     - tenacity >=8,<9
-    - enum34 >1.1.0  # [py<34]
   run_constrained:
     - prometheus_client >=0.5,<0.15
     - toml <2.0.0
