@@ -29,9 +29,7 @@ requirements:
   run:
     - python
     - tornado >=5.0,<7
-    # cf doesn't have this package to satisfy this dependency on win
-    # - python-daemon <2.2.0  # [win]
-    - python-daemon  # [not win]
+    - python-daemon
     - python-dateutil >=2.7.5,<3
     - tenacity >=8,<9
   run_constrained:
