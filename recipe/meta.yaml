@@ -12,6 +12,8 @@ source:
 build:
   number: 0
   skip: true  # [py<37 or s390x]
+  # skip win because of missing python-daemon
+  skip: true  # [win]
   script: {{ PYTHON }} -m pip install . --no-deps -vv --no-build-isolation
   entry_points:
     - luigi = luigi.cmdline:luigi_run
