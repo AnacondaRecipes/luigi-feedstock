@@ -1,17 +1,17 @@
 {% set name = "luigi" %}
-{% set version = "3.6.0" %}
+{% set version = "3.7.2" %}
 
 package:
-  name: luigi
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://github.com/spotify/luigi/archive/v{{ version }}.tar.gz
-  sha256: ef389b67457e3f887252ab09d4ce21efb994239a4689b7daf1be1e7847b0d858
+  url: https://github.com/spotify/{{ name }}/archive/v{{ version }}.tar.gz
+  sha256: 8e6610e69befa0d39caa11c069e26c70f1cd2715b3b142f012a608652c404be5
 
 build:
-  number: 1
-  skip: true  # [py<37 or s390x]
+  number: 0
+  skip: true  # [py<38 or py>312]
   # skip win because of missing python-daemon
   skip: true  # [win]
   script: {{ PYTHON }} -m pip install . --no-deps -vv --no-build-isolation
@@ -26,21 +26,22 @@ requirements:
   host:
     - python
     - pip
-    - setuptools
-    - wheel
+    - hatchling
+    - hatch-fancy-pypi-readme
   run:
     - python
-    - tornado >=5.0,<7
-    - python-daemon
     - python-dateutil >=2.7.5,<3
     - tenacity >=8,<9
+    - tornado >=5.0,<7
+    - python-daemon
+    - typing-extensions >=4.12.2
   run_constrained:
     - prometheus_client >=0.5,<0.15
     - toml <2.0.0
 
 test:
-  requires:
-    - pip
+  source_files:
+    - test
   imports:
     - luigi
     - luigi.configuration
@@ -48,6 +49,9 @@ test:
     - luigi.contrib.hdfs
     - luigi.tools
     - luigi.scheduler
+  requires:
+    - pip
+    - pytest
   commands:
     - luigi --help
     - luigid --help
@@ -55,6 +59,8 @@ test:
     - luigi-deps --help
     - luigi-deps-tree --help
     - pip check
+    # Run only basic tests since tests demands specific dependencies versions which are not available
+    - pytest -v test/most_common_test.py test/import_test.py
 
 about:
   home: https://github.com/spotify/luigi
@@ -67,7 +73,7 @@ about:
     handling failures, command line integration, and much more. It also comes
     with Hadoop support built in.
   dev_url: https://github.com/spotify/luigi
-  doc_url: https://luigi.readthedocs.io/en/stable/
+  doc_url: https://luigi.readthedocs.io
 
 extra:
   recipe-maintainers:
