@@ -10,10 +10,8 @@ source:
   sha256: 8e6610e69befa0d39caa11c069e26c70f1cd2715b3b142f012a608652c404be5
 
 build:
-  number: 0
+  number: 1
   skip: true  # [py<38 or py>312]
-  # skip win because of missing python-daemon
-  skip: true  # [win]
   script: {{ PYTHON }} -m pip install . --no-deps -vv --no-build-isolation
   entry_points:
     - luigi = luigi.cmdline:luigi_run
@@ -33,7 +31,7 @@ requirements:
     - python-dateutil >=2.7.5,<3
     - tenacity >=8,<9
     - tornado >=5.0,<7
-    - python-daemon
+    - python-daemon  # [not win]
     - typing-extensions >=4.12.2
   run_constrained:
     - prometheus_client >=0.5,<0.15
@@ -58,7 +56,8 @@ test:
     - luigi-grep --help
     - luigi-deps --help
     - luigi-deps-tree --help
-    - pip check
+    # Skip pip because python-daemon is not available on win.
+    - pip check  # [not win]
     # Run only basic tests since tests demands specific dependencies versions which are not available
     - pytest -v test/most_common_test.py test/import_test.py
 
