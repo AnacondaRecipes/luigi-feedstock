@@ -56,7 +56,8 @@ test:
     - luigi-grep --help
     - luigi-deps --help
     - luigi-deps-tree --help
-    - pip check
+    # Skip pip because python-daemon is not available on win.
+    - pip check  # [not win]
     # Run only basic tests since tests demands specific dependencies versions which are not available
     - pytest -v test/most_common_test.py test/import_test.py
 
