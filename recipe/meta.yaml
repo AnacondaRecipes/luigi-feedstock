@@ -6,12 +6,12 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/spotify/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: 6d3bef9b59a3320565bb2eb9c44f9f9d049cdaab567fc297a6a901ff4851f3d8
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 2fa5eb5d3474e495de09bd964f502936c08f8b1eb6e0f3ca3c8a69116c38d0c3
 
 build:
   number: 0
-  skip: true  # [py<38 or py>312]
+  skip: true  # [py<310 or py>=314]
   script: {{ PYTHON }} -m pip install . --no-deps -vv --no-build-isolation
   entry_points:
     - luigi = luigi.cmdline:luigi_run
@@ -32,12 +32,13 @@ requirements:
     - tenacity >=9
     - tornado >=5.0,<7
     - python-daemon  # [not win]
+    - python-daemon <2.2.0  # [win]
     - typing-extensions >=4.12.2
-    - typing_extensions >=4.12.2
   run_constrained:
+    # prometheus
     - prometheus_client >=0.5,<0.15
+    # toml
     - toml <2.0.0
-    - prometheus-client >=0.5,<0.25
 
 test:
   source_files:
@@ -60,9 +61,6 @@ test:
     - luigi-deps-tree --help
     - pip check
     - pytest -v test/most_common_test.py test/import_test.py
-    - pip check
-    - pip check
-    - pip check
 
 about:
   home: https://github.com/spotify/luigi
