@@ -31,8 +31,7 @@ requirements:
     - python-dateutil >=2.7.5,<3
     - tenacity >=9
     - tornado >=5.0,<7
-    - python-daemon  # [not win]
-    - python-daemon <2.2.0  # [win]
+    - python-daemon
     - typing-extensions >=4.12.2
   run_constrained:
     # prometheus
