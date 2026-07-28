@@ -31,7 +31,8 @@ requirements:
     - python-dateutil >=2.7.5,<3
     - tenacity >=9
     - tornado >=5.0,<7
-    - python-daemon
+    - python-daemon  # [not win]
+    - python-daemon <2.2.0  # [win]
     - typing-extensions >=4.12.2
   run_constrained:
     # prometheus
@@ -58,7 +59,7 @@ test:
     - luigi-grep --help
     - luigi-deps --help
     - luigi-deps-tree --help
-    - pip check
+    - pip check  # [not win]
     - pytest -v test/most_common_test.py test/import_test.py
 
 about:
