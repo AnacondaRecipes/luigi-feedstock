@@ -31,8 +31,8 @@ requirements:
     - python-dateutil >=2.7.5,<3
     - tenacity >=9
     - tornado >=5.0,<7
+    # python-daemon is not compatible with windows.
     - python-daemon  # [not win]
-    - python-daemon <2.2.0  # [win]
     - typing-extensions >=4.12.2
   run_constrained:
     # prometheus
@@ -60,7 +60,7 @@ test:
     - luigi-deps --help
     - luigi-deps-tree --help
     - pip check  # [not win]
-    - pytest -v test/most_common_test.py test/import_test.py
+    - pytest -v test/most_common_test.py test/import_test.py  # [not win]
 
 about:
   home: https://github.com/spotify/luigi
@@ -80,3 +80,5 @@ extra:
     - ocefpaf
     - kwilcox
     - nehaljwani
+  skip-lints:
+    - missing_pip_check  # [win]
