@@ -1,17 +1,24 @@
 {% set name = "luigi" %}
-{% set version = "3.7.2" %}
+{% set version = "3.8.1" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://github.com/spotify/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: 8e6610e69befa0d39caa11c069e26c70f1cd2715b3b142f012a608652c404be5
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 2fa5eb5d3474e495de09bd964f502936c08f8b1eb6e0f3ca3c8a69116c38d0c3
 
 build:
-  number: 1
-  skip: true  # [py<38 or py>312]
+  number: 0
+  skip: true  # [py<310 or py>=314]
+  # python-daemon implements Unix-style daemonization and is
+  # scoped to POSIX systems only (see PyPI description: "Library to implement
+  # a well-behaved Unix daemon process" - https://pypi.org/project/python-daemon/).
+  # It imports `pwd` and `resource` unconditionally, which don't exist on
+  # Windows. Skip on Windows.
+  # https://pypi.org/project/python-daemon/
+  skip: true  # [win]
   script: {{ PYTHON }} -m pip install . --no-deps -vv --no-build-isolation
   entry_points:
     - luigi = luigi.cmdline:luigi_run
@@ -29,12 +36,15 @@ requirements:
   run:
     - python
     - python-dateutil >=2.7.5,<3
-    - tenacity >=8,<9
+    - tenacity >=9
     - tornado >=5.0,<7
-    - python-daemon  # [not win]
+    # python-daemon is not compatible with windows.
+    - python-daemon
     - typing-extensions >=4.12.2
   run_constrained:
+    # prometheus
     - prometheus_client >=0.5,<0.15
+    # toml
     - toml <2.0.0
 
 test:
@@ -56,9 +66,7 @@ test:
     - luigi-grep --help
     - luigi-deps --help
     - luigi-deps-tree --help
-    # Skip pip because python-daemon is not available on win.
-    - pip check  # [not win]
-    # Run only basic tests since tests demands specific dependencies versions which are not available
+    - pip check
     - pytest -v test/most_common_test.py test/import_test.py
 
 about:
