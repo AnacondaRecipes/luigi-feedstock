@@ -12,6 +12,13 @@ source:
 build:
   number: 0
   skip: true  # [py<310 or py>=314]
+  # python-daemon implements Unix-style daemonization and is
+  # scoped to POSIX systems only (see PyPI description: "Library to implement
+  # a well-behaved Unix daemon process" - https://pypi.org/project/python-daemon/).
+  # It imports `pwd` and `resource` unconditionally, which don't exist on
+  # Windows. Skip on Windows.
+  # https://pypi.org/project/python-daemon/
+  skip: true  # [win]
   script: {{ PYTHON }} -m pip install . --no-deps -vv --no-build-isolation
   entry_points:
     - luigi = luigi.cmdline:luigi_run
@@ -32,7 +39,7 @@ requirements:
     - tenacity >=9
     - tornado >=5.0,<7
     # python-daemon is not compatible with windows.
-    - python-daemon  # [not win]
+    - python-daemon
     - typing-extensions >=4.12.2
   run_constrained:
     # prometheus
@@ -59,8 +66,8 @@ test:
     - luigi-grep --help
     - luigi-deps --help
     - luigi-deps-tree --help
-    - pip check  # [not win]
-    - pytest -v test/most_common_test.py test/import_test.py  # [not win]
+    - pip check
+    - pytest -v test/most_common_test.py test/import_test.py
 
 about:
   home: https://github.com/spotify/luigi
@@ -80,5 +87,3 @@ extra:
     - ocefpaf
     - kwilcox
     - nehaljwani
-  skip-lints:
-    - missing_pip_check  # [win]
