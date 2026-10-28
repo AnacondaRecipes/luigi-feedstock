@@ -10,7 +10,7 @@ source:
   sha256: 2fa5eb5d3474e495de09bd964f502936c08f8b1eb6e0f3ca3c8a69116c38d0c3
 
 build:
-  number: 0
+  number: 1
   skip: true  # [py<310 or py>=314]
   # python-daemon implements Unix-style daemonization and is
   # scoped to POSIX systems only (see PyPI description: "Library to implement
